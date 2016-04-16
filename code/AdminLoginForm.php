@@ -19,8 +19,11 @@ class AdminLoginForm extends MemberLoginForm
                 . _t('Member.BUTTONLOSTPASSWORD', "I've lost my password") . '</a></p>'
             ));
         }
-
-		$this->Fields()->push( CheckboxField::create('Test', 'Test'));
+		
+		$TermsAccepted = CheckboxField::create('TermsAccepted');
+		$TermsAccepted ->setTitle('<small>Ich habe die <a data-modal-url="'.Controller::curr()->Link().'showTermsModal" class="fire-terms-modal">Nutzungsbedingungen</a> gelesen und akzeptiert.</small>');
+		
+		$this->Fields()->push( $TermsAccepted ));
 
 
         Requirements::customScript(<<<JS
