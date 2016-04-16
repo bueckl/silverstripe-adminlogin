@@ -20,28 +20,6 @@ fieldset, form {
 	margin:0;
 	padding:0px;
 }
-.form {
-    width: 85%;
-	max-width:260px;
-	margin:0 auto 5px auto;
-	padding:10px;
-	border:1px solid #899D97;
-	-moz-border-radius: 5px;
-	border-radius: 5px;
-	background:#fff;
-}
-
-.form h3{
-	color:#015893;
-}
-
-.loginlogo{
-	margin:80px auto 10px auto;
-	text-align:center;
-	width:180px;
-	height:33px;
-	background: url("../../framework/admin/images/logo.gif") no-repeat 0px -128px;
-}
 
 #Remember{
 	margin-top:10px;

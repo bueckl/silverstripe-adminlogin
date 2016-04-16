@@ -15,13 +15,13 @@ class AdminLoginForm extends MemberLoginForm
             $this->Actions()->removeByName('forgotPassword');
             $this->Actions()->push(new LiteralField(
                 'forgotPassword',
-                '<p id="ForgotPassword"><a href="AdminSecurity/lostpassword">'
-                . _t('Member.BUTTONLOSTPASSWORD', "I've lost my password") . '</a></p>'
+                '<hr><a href="AdminSecurity/lostpassword">'
+                . _t('Member.BUTTONLOSTPASSWORD', "I've lost my password") . '</a>'
             ));
         }
 		
 		$TermsAccepted = CheckboxField::create('TermsAccepted');
-		$TermsAccepted ->setTitle('<small>Ich habe die <a data-modal-url="'.Controller::curr()->Link().'showTermsModal" class="fire-terms-modal">Nutzungsbedingungen</a> gelesen und akzeptiert.</small>');
+		$TermsAccepted ->setTitle('Ich habe die <a data-modal-url="'.Controller::curr()->Link().'showTermsModal" class="fire-terms-modal">Nutzungsbedingungen</a> gelesen und akzeptiert.');
 		
 		$this->Fields()->push( $TermsAccepted );
 

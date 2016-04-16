@@ -51,7 +51,7 @@ class AdminSecurity extends Security
 			'Terms' => SiteConfig::get()->First()->BackofficeTerms
 		));
 		
-		return $data->renderWith(array('Terms'));
+		return $data->renderWith('Terms');
 		
 	}
 	
