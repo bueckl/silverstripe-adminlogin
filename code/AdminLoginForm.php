@@ -20,6 +20,9 @@ class AdminLoginForm extends MemberLoginForm
             ));
         }
 
+		$this->Fields()->push( CheckboxField::create('Test', 'Test'));
+
+
         Requirements::customScript(<<<JS
 			(function() {
 				var el = document.getElementById("AdminLoginForm_LoginForm_Email");
