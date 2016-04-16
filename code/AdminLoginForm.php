@@ -23,7 +23,7 @@ class AdminLoginForm extends MemberLoginForm
 		$TermsAccepted = CheckboxField::create('TermsAccepted');
 		$TermsAccepted ->setTitle('<small>Ich habe die <a data-modal-url="'.Controller::curr()->Link().'showTermsModal" class="fire-terms-modal">Nutzungsbedingungen</a> gelesen und akzeptiert.</small>');
 		
-		$this->Fields()->push( $TermsAccepted ));
+		$this->Fields()->push( $TermsAccepted );
 
 
         Requirements::customScript(<<<JS
