@@ -17,12 +17,13 @@ class AdminLoginExtension extends Extension
      */
     public function onBeforeSecurityLogin()
     {
-        $backUrl = $this->owner->getRequest()->getVar('BackURL');
-        if (strstr($backUrl, '/admin/')) {
-            if (Controller::curr()->class != 'AdminSecurity') {
-                $link = 'AdminSecurity/login' . '?BackURL=' . urlencode($backUrl);
-                return $this->owner->redirect($link);
-            }
-        }
+		
+		$backUrl = $this->owner->getRequest()->getVar('BackURL');
+		if (strstr($backUrl, '/admin/')) {
+			if (Controller::curr()->class != 'AdminSecurity') {
+				$link = 'AdminSecurity/login' . '?BackURL=' . urlencode($backUrl);
+				return $this->owner->redirect($link);
+			}
+		}
     }
 }

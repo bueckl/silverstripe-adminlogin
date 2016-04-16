@@ -20,6 +20,10 @@ class AdminLoginForm extends MemberLoginForm
             ));
         }
 		
+		$this->Fields()->push( LiteralField::create('Hint',
+			'<hr><strong>Bei der ersten Anmeldung im System akzeptieren Sie bitte unsere allgemeinen Nutzungsbedingungen!</strong>'
+		));
+		
 		$TermsAccepted = CheckboxField::create('TermsAccepted');
 		$TermsAccepted ->setTitle('Ich habe die <a data-modal-url="'.Controller::curr()->Link().'showTermsModal" class="fire-terms-modal">Nutzungsbedingungen</a> gelesen und akzeptiert.');
 		
@@ -74,5 +78,51 @@ JS
         $email->setTo($member->Email);
         $email->send();
     }
+
+	/**
+	 * Login form handler method
+	 *
+	 * This method is called when the user clicks on "Log in"
+	 *
+	 * @param array $data Submitted data
+	 */
+	public function dologin($data) {
+		
+		if($this->performLogin($data)) {
+			
+			
+			if ($data['TermsAccepted'] == 1) {
+				$member = Member::currentUser();
+				$member->TermsAccepted = 1;
+				$member->write();
+			}
+			
+			if( Member::currentUser()->TermsAccepted == 0 ) {
+				$member = Member::currentUser();
+				$member->logout();
+				return Controller::curr()->redirectBack();
+			}
+		
+			$this->logInUserAndRedirect($data);
+
+		} else {
+			if(array_key_exists('Email', $data)){
+				Session::set('SessionForms.MemberLoginForm.Email', $data['Email']);
+				Session::set('SessionForms.MemberLoginForm.Remember', isset($data['Remember']));
+			}
+
+			if(isset($_REQUEST['BackURL'])) $backURL = $_REQUEST['BackURL'];
+			else $backURL = null;
+
+			if($backURL) Session::set('BackURL', $backURL);
+
+			// Show the right tab on failed login
+			$loginLink = Director::absoluteURL($this->controller->Link('login'));
+			if($backURL) $loginLink .= '?BackURL=' . urlencode($backURL);
+			$this->controller->redirect($loginLink . '#' . $this->FormName() .'_tab');
+		}
+	}
+
+
 
 }
