@@ -9,10 +9,11 @@ class AdminSecurity extends Security
     /**
      * @var array
      */
-    private static $allowed_actions = array(
-        'passwordsent',
-        'ChangePasswordForm'
-    );
+	private static $allowed_actions = array(
+		'passwordsent',
+		'ChangePasswordForm',
+		'showTermsModal'
+	);
 
     /**
      * Template thats used to render the pages.
@@ -42,7 +43,18 @@ class AdminSecurity extends Security
 
         Object::useCustomClass('MemberLoginForm', 'AdminLoginForm');
     }
-
+	
+	
+	public function showTermsModal() {
+		
+		$data = new ArrayData(array(
+			'Terms' => SiteConfig::get()->First()->BackofficeTerms
+		));
+		
+		return $data->renderWith(array('Terms'));
+		
+	}
+	
     /**
      * @param null $action
      * @return string

@@ -9,20 +9,8 @@
 class AdminLoginPage_Controller extends ContentController
 {
 	
-	private static $allowed_actions = array (
-		'showTermsModal'
-	);	
-	
-	public function showTermsModal() {
-		
-		$data = new ArrayData(array(
-			'Terms' => SiteConfig::get()->First()->BackofficeTerms
-		));
-		
-		return $data->renderWith(array('Terms'));
-		
-	}
-	
+
+
 	public function init() {
 
 		parent::init();
