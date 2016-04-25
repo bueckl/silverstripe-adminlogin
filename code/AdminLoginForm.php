@@ -6,31 +6,35 @@
 class AdminLoginForm extends MemberLoginForm
 {
 
-    public function __construct($controller, $name, $fields = null, $actions = null, $checkCurrentUser = true)
-    {
-        parent::__construct($controller, $name, $fields, $actions, $checkCurrentUser);
-
-        if ($this->Actions()->fieldByName('forgotPassword')) {
-            // replaceField won't work, since it's a dataless field
-            $this->Actions()->removeByName('forgotPassword');
-            $this->Actions()->push(new LiteralField(
-                'forgotPassword',
-                '<hr><a href="AdminSecurity/lostpassword">'
-                . _t('Member.BUTTONLOSTPASSWORD', "I've lost my password") . '</a>'
-            ));
-        }
+	public function __construct($controller, $name, $fields = null, $actions = null, $checkCurrentUser = true) {
 		
-		$this->Fields()->push( LiteralField::create('Hint',
-			'<hr><strong>Bei der ersten Anmeldung im System akzeptieren Sie bitte unsere allgemeinen Nutzungsbedingungen!</strong>'
-		));
+		parent::__construct($controller, $name, $fields, $actions, $checkCurrentUser);
 		
-		$TermsAccepted = CheckboxField::create('TermsAccepted');
-		$TermsAccepted ->setTitle('Ich habe die <a data-modal-url="'.Controller::curr()->Link().'showTermsModal" class="fire-terms-modal">Nutzungsbedingungen</a> gelesen und akzeptiert.');
+		if ($this->Actions()->fieldByName('forgotPassword')) {
+			// replaceField won't work, since it's a dataless field
+			$this->Actions()->removeByName('forgotPassword');
+			$this->Actions()->push(new LiteralField(
+				'forgotPassword',
+				'<hr><a href="AdminSecurity/lostpassword">'
+				. _t('Member.BUTTONLOSTPASSWORD', "I've lost my password") . '</a>'
+			));
+		}
+
+		// Force to Accept Terms
+		if ( Cookie::get('showTerms') ) { 
+
+			$this->Fields()->push( LiteralField::create('Hint',
+				'<hr><strong>Bei der ersten Anmeldung im System akzeptieren Sie bitte unsere allgemeinen Nutzungsbedingungen!</strong>'
+			));
 		
-		$this->Fields()->push( $TermsAccepted );
-
-
-        Requirements::customScript(<<<JS
+			$TermsAccepted = CheckboxField::create('TermsAccepted');
+			$TermsAccepted ->setTitle('Ich habe die <a data-modal-url="'.Controller::curr()->Link().'showTermsModal" class="fire-terms-modal">Nutzungsbedingungen</a> gelesen und akzeptiert.');
+			
+			$this->Fields()->push( $TermsAccepted );
+		}
+		
+		
+		Requirements::customScript(<<<JS
 			(function() {
 				var el = document.getElementById("AdminLoginForm_LoginForm_Email");
 				if(el && el.focus) el.focus();
@@ -88,24 +92,29 @@ JS
 	 */
 	public function dologin($data) {
 		
+		
 		if($this->performLogin($data)) {
-			
 			
 			if ($data['TermsAccepted'] == 1) {
 				$member = Member::currentUser();
 				$member->TermsAccepted = 1;
 				$member->write();
+				Cookie::set('showTerms', false);
 			}
 			
 			if( Member::currentUser()->TermsAccepted == 0 ) {
 				$member = Member::currentUser();
 				$member->logout();
+				// We show AcceptTerms fields on Construct
+				Cookie::set('showTerms', true);
 				return Controller::curr()->redirectBack();
 			}
-		
+			
 			$this->logInUserAndRedirect($data);
 
 		} else {
+			
+			
 			if(array_key_exists('Email', $data)){
 				Session::set('SessionForms.MemberLoginForm.Email', $data['Email']);
 				Session::set('SessionForms.MemberLoginForm.Remember', isset($data['Remember']));
