@@ -10,15 +10,6 @@ class AdminLoginForm extends MemberLoginForm
 		
 		parent::__construct($controller, $name, $fields, $actions, $checkCurrentUser);
 		
-		if ($this->Actions()->fieldByName('forgotPassword')) {
-			// replaceField won't work, since it's a dataless field
-			$this->Actions()->removeByName('forgotPassword');
-			$this->Actions()->push(new LiteralField(
-				'forgotPassword',
-				'<hr><a href="AdminSecurity/lostpassword">'
-				. _t('Member.BUTTONLOSTPASSWORD', "I've lost my password") . '</a>'
-			));
-		}
 
 		// Force to Accept Terms
 		if ( Cookie::get('showTerms') ) { 
@@ -31,6 +22,23 @@ class AdminLoginForm extends MemberLoginForm
 			$TermsAccepted ->setTitle('Ich habe die <a data-modal-url="'.Controller::curr()->Link().'showTermsModal" class="fire-terms-modal">Nutzungsbedingungen</a> gelesen und akzeptiert.');
 			
 			$this->Fields()->push( $TermsAccepted );
+			
+		} else {
+			$TermsAccepted = LiteralField::create("TermsAccepted", '<div><hr><a data-modal-url="'.Controller::curr()->Link().'showTermsModal" class="fire-terms-modal">Bitte lesen Sie unsere allgemeinen Nutzungsbedingungen</a>.</div>');
+			
+			$this->Actions()->push( $TermsAccepted );
+			
+		}
+			
+		
+		if ($this->Actions()->fieldByName('forgotPassword')) {
+			// replaceField won't work, since it's a dataless field
+			$this->Actions()->removeByName('forgotPassword');
+			$this->Actions()->push(new LiteralField(
+				'forgotPassword',
+				'<a href="AdminSecurity/lostpassword">'
+				. _t('Member.BUTTONLOSTPASSWORD', "I've lost my password") . '</a>'
+			));
 		}
 		
 		

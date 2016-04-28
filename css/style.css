@@ -52,9 +52,10 @@ input.text {
     padding: 6px 19px;
 	width:100%;
 	
-	&:hover {
-		color: #fff;
-	}
+}
+
+.action.action:hover {
+	color: #fff;
 }
 
 .action  {
@@ -130,4 +131,8 @@ input[type="color"]:focus,
 	.loginlogo{
 		margin:5px auto 0px auto;
 	}
+}
+
+a {
+	cursor: pointer;
 }
