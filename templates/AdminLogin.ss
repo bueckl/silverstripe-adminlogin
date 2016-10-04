@@ -16,7 +16,7 @@
 <body class="$ClassName">
 <div class="container-fluid" id="main">
     <div class="row-fluid" id="maininner">
-        <!-- <div class="loginlogo"></div> -->
+        <div class="loginlogo"></div>
         <div class="form">
             <div class="content">
                 <h3>$Title</h3>
@@ -26,7 +26,5 @@
         </div>
     </div>
 </div>
-<div id="TermsModal" class="modal fade"></div><!-- /.modal -->
-
 </body>
 </html>
